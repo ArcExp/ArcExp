@@ -1,0 +1,9 @@
+[Unit]
+Description=OS Installer
+
+[Service]
+ExecStart=/usr/bin/os-installer
+User=root
+
+[Install]
+WantedBy=default.target
