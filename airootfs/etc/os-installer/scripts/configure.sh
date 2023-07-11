@@ -38,12 +38,6 @@ task_wrapper sudo arch-chroot "$workdir" locale-gen
 
 # Add dconf tweaks for GNOME desktop configuration
 task_wrapper sudo cp -rv "$osidir/dconf-settings/dconf" "$workdir/etc/"
-
-# Copy background image
-task_wrapper sudo cp "$osidir/wallpaper/streetview.png" "$workdir/usr/share/backgrounds/"
-
-# Set permissions for the background image and update dconf
-task_wrapper sudo arch-chroot "$workdir" chmod 644 "/usr/share/backgrounds/streetview.png"
 task_wrapper sudo arch-chroot "$workdir" dconf update
 
 # Set hostname
