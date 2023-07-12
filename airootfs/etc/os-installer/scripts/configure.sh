@@ -55,9 +55,41 @@ echo "root:$OSI_USER_PASSWORD" | task_wrapper sudo arch-chroot "$workdir" chpass
 # Set timezone
 task_wrapper sudo arch-chroot "$workdir" ln -sf "/usr/share/zoneinfo/$OSI_TIMEZONE" /etc/localtime
 
+# Set Keymap
+declare -r current_keymap=$(gsettings get org.gnome.desktop.input-sources sources)
+printf "[org.gnome.desktop.input-sources]\nsources = $current_keymap\n" | task_wrapper sudo tee $workdir/etc/dconf/db/local.d/keymap
+
 # Set auto-login if requested
 if [[ "$OSI_USER_AUTOLOGIN" -eq 1 ]]; then
     printf "[daemon]\nAutomaticLoginEnable=True\nAutomaticLogin=$OSI_USER_NAME\n" | task_wrapper sudo tee "$workdir/etc/gdm/custom.conf"
 fi
+
+# Add multilib repository
+printf "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n" | task_wrapper sudo tee -a "$workdir/etc/pacman.conf"
+
+# Install AUR packages
+task_wrapper sudo arch-chroot "$workdir" git clone https://github.com/ArcExp/ArcExp-Pkgs.git
+task_wrapper sudo arch-chroot "$workdir" pacman -U /ArcExp-Pkgs/pikaur-1.15.3-1-any.pkg.tar.zst --noconfirm
+task_wrapper sudo arch-chroot "$workdir" pikaur -S --noconfirm extension-manager nautilus-admin-gtk4 protonup-qt qbittorrent-enhanced xone-dkms xpadneo-dkms xone-dongle-firmware yay flatseal adwsteamgtk ttf-ms-fonts onlyoffice-bin lutris-git gamescope-git mangohud-git lib32-mangohud-git
+
+# Install flatpak packages
+yes | task_wrapper sudo arch-chroot "$workdir" flatpak install -y flathub org.shotcut.Shotcut
+yes | task_wrapper sudo arch-chroot "$workdir" flatpak install -y flathub com.discordapp.Discord
+
+# Remove package files and install final package
+task_wrapper sudo arch-chroot "$workdir" rm -rf /ArcExp-Pkgs --noconfirm
+
+# Remove Linux kernel and its dependencies
+task_wrapper sudo arch-chroot "$workdir" pikaur -Rns --noconfirm linux
+task_wrapper sudo arch-chroot "$workdir" pikaur -Rns --noconfirm linux-headers
+
+# Install linux-fsync-nobara-bin kernel
+task_wrapper sudo arch-chroot "$workdir" pikaur -S --noconfirm linux-fsync-nobara-bin
+
+# Update GRUB configuration
+task_wrapper sudo arch-chroot "$workdir" grub-mkconfig -o /boot/grub/grub.cfg
+
+# Finally, update system and exit script
+task_wrapper sudo arch-chroot "$workdir" pikaur -Syu --noconfirm
 
 exit 0

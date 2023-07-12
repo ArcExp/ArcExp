@@ -27,13 +27,13 @@ if [ "${OSI_DEVICE_IS_PARTITION}" -eq 0 ]; then
     if [ -n "${OSI_DEVICE_EFI_PARTITION}" ]; then
         # GPT partitioning for EFI systems
         task_wrapper sudo parted "${OSI_DEVICE_PATH}" mklabel gpt --script
-        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary ext4 1MiB 512MiB name 1 boot --script
-        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary btrfs 512MiB 100% name 2 home --script
+        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary ext4 1MiB 512MiB --script
+        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary btrfs 512MiB 100% --script
     else
         # MBR partitioning for BIOS systems
         task_wrapper sudo parted "${OSI_DEVICE_PATH}" mklabel msdos --script
-        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary ext4 1MiB 512MiB name 1 boot --script
-        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary btrfs 512MiB 100% name 2 home --script
+        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary ext4 1MiB 512MiB --script
+        task_wrapper sudo parted "${OSI_DEVICE_PATH}" mkpart primary btrfs 512MiB 100% --script
     fi
 fi
 
@@ -67,12 +67,12 @@ fi
 # Mount partitions
 if [[ "$OSI_DEVICE_IS_PARTITION" -eq 0 ]]; then
     # If target is a drive
-    task_wrapper sudo mount LABEL=home "$workdir"
+    task_wrapper sudo mount "${OSI_DEVICE_PATH}2" "$workdir"
     task_wrapper sudo btrfs subvolume create "$workdir/@"
     task_wrapper sudo umount "$workdir"
-    task_wrapper sudo mount -o subvol=@ LABEL=home "$workdir"
+    task_wrapper sudo mount -o subvol=@ "${OSI_DEVICE_PATH}2" "$workdir"
     task_wrapper sudo mkdir -p "$workdir/boot"
-    task_wrapper sudo mount LABEL=boot "$workdir/boot"
+    task_wrapper sudo mount "${OSI_DEVICE_PATH}1" "$workdir/boot"
     task_wrapper sudo mkdir -p "$workdir/home"
 else
     # If target is a partition
