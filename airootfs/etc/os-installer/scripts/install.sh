@@ -81,7 +81,7 @@ else
 fi
 
 # Install base system packages
-task_wrapper sudo pacstrap "$workdir" base linux linux-firmware intel-ucode amd-ucode
+task_wrapper sudo pacstrap "$workdir" base base-devel linux linux-firmware intel-ucode amd-ucode
 
 # Populate the Arch Linux keyring inside chroot
 task_wrapper sudo arch-chroot "$workdir" pacman-key --init
