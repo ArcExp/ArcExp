@@ -69,27 +69,25 @@ printf "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n" | task_wrapper sudo 
 
 # Install AUR packages
 task_wrapper sudo arch-chroot "$workdir" git clone https://github.com/ArcExp/ArcExp-Pkgs.git
-task_wrapper sudo arch-chroot "$workdir" pacman -U /ArcExp-Pkgs/pikaur-1.15.3-1-any.pkg.tar.zst --noconfirm
-task_wrapper sudo arch-chroot "$workdir" pikaur -S --noconfirm extension-manager nautilus-admin-gtk4 protonup-qt qbittorrent-enhanced xone-dkms xpadneo-dkms xone-dongle-firmware yay flatseal adwsteamgtk ttf-ms-fonts onlyoffice-bin lutris-git gamescope-git mangohud-git lib32-mangohud-git
 
-# Install flatpak packages
-yes | task_wrapper sudo arch-chroot "$workdir" flatpak install -y flathub org.shotcut.Shotcut
-yes | task_wrapper sudo arch-chroot "$workdir" flatpak install -y flathub com.discordapp.Discord
+task_wrapper sudo arch-chroot "$workdir" pacman -U /ArcExp-Pkgs/yay-bin-12.1.0-1-x86_64.pkg.tar.zst --noconfirm
 
-# Remove package files and install final package
+task_wrapper sudo arch-chroot "$workdir" yay -S --noconfirm extension-manager nautilus-admin-gtk4 protonup-qt qbittorrent-enhanced xone-dkms xpadneo-dkms xone-dongle-firmware yay flatseal adwsteamgtk ttf-ms-fonts onlyoffice-bin lutris-git gamescope-git mangohud-git lib32-mangohud-git
+
+# Remove package files and install steam
 task_wrapper sudo arch-chroot "$workdir" rm -rf /ArcExp-Pkgs --noconfirm
+task_wrapper sudo arch-chroot "$workdir" pacman -S steam
 
 # Remove Linux kernel and its dependencies
-task_wrapper sudo arch-chroot "$workdir" pikaur -Rns --noconfirm linux
-task_wrapper sudo arch-chroot "$workdir" pikaur -Rns --noconfirm linux-headers
+task_wrapper sudo arch-chroot "$workdir" pacman -Rns --noconfirm linux
 
 # Install linux-fsync-nobara-bin kernel
-task_wrapper sudo arch-chroot "$workdir" pikaur -S --noconfirm linux-fsync-nobara-bin
+task_wrapper sudo arch-chroot "$workdir" yay -S --noconfirm linux-fsync-nobara-bin
 
 # Update GRUB configuration
 task_wrapper sudo arch-chroot "$workdir" grub-mkconfig -o /boot/grub/grub.cfg
 
 # Finally, update system and exit script
-task_wrapper sudo arch-chroot "$workdir" pikaur -Syu --noconfirm
+task_wrapper sudo arch-chroot "$workdir" yay --noconfirm
 
 exit 0
