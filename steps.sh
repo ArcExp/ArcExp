@@ -3,17 +3,17 @@ sudo rm -r iso/ out/ post/
 mkdir out/
 mkdir post/
 mkdir iso/
-mkdir /home/silvolde/iso/ArcExp/post/iso/
-mkdir /home/silvolde/iso/ArcExp/post/checksums/
+mkdir /home/silvolde/Documents/iso/ArcExp_V2/post/iso/
+mkdir /home/silvolde/Documents/iso/ArcExp_V2/post/checksums/
 
-sudo mkarchiso -v -w iso -o out /home/silvolde/iso/ArcExp/
+sudo mkarchiso -v -w iso -o out /home/silvolde/Documents/iso/ArcExp_V2
  
 sudo chown -R silvolde:silvolde out/ 
 
-mv out/* /home/silvolde/iso/ArcExp/post/iso/
+mv out/* /home/silvolde/Documents/iso/ArcExp_V2/post/iso/
 
-sha256sum /home/silvolde/iso/ArcExp/post/iso/* > /home/silvolde/iso/ArcExp/post/checksums/sha512sums.txt
+sha256sum /home/silvolde/Documents/iso/ArcExp_V2/post/iso/* > /home/silvolde/Documents/iso/ArcExp_V2/post/checksums/sha512sums.txt
 
-md5sum /home/silvolde/iso/ArcExp/post/iso/* > /home/silvolde/iso/ArcExp/post/checksums/md5sum.txt
+md5sum /home/silvolde/Documents/iso/ArcExp_V2/post/iso/* > /home/silvolde/Documents/iso/ArcExp_V2/post/checksums/md5sum.txt
 
 sudo chown -R silvolde:silvolde post/
