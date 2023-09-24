@@ -1,4 +1,8 @@
-NAME=ArcExp
-PRETTY_NAME=ArcExp
-ID=arc-exp
-ID_LIKE=arc-exp
+NAME="ArcExp"
+ID=ArcExp
+ID_LIKE=arch
+BUILD_ID=rolling
+ANSI_COLOR="38;2;23;147;209"
+HOME_URL="https://arcexp.github.io/"
+SUPPORT_URL="https://github.com/ArcExp/ArcExp"
+BUG_REPORT_URL="https://github.com/ArcExp/ArcExp"
