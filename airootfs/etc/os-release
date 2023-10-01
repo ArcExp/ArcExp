@@ -1,6 +1,6 @@
 NAME="ArcExp"
 ID=ArcExp
-ID_LIKE=arch
+ID_LIKE=arcexp
 BUILD_ID=rolling
 ANSI_COLOR="38;2;23;147;209"
 HOME_URL="https://arcexp.github.io/"
